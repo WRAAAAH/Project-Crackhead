@@ -1,0 +1,19 @@
+{% extends "account/login.html" %}
+
+{% block title %}Home - Project Crackhead{% endblock %}
+
+{% block content %}
+    <h1>Welcome to Project Crackhead!</h1>
+    <p>This is the homepage of your awesome Django project.</p>
+
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}! You are logged in.</p>
+    {% else %}
+        <p>Please <a href="{% url 'account_login' %}">log in</a> or <a href="{% url 'account_signup' %}">sign up</a> to continue.</p>
+
+        <!-- Optionally include the login form directly on the homepage -->
+        <div class="login-section">
+            {% include "account/login.html" %}
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,10 +1,12 @@
+{% extends "base.html" %}
+{% load socialaccount %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="{% static 'controller/css/../../static/css/main.css' %}">
+    <link rel="stylesheet" href="{% static '' %}">
 </head>
 <body>
     <div id="loginPopup">
@@ -13,8 +15,9 @@
             <br>
             <h2>Logowanie</h2>
             <br>
-            <form>
+            <form method="post" action="{% url 'account_login' %}">
                 {% csrf_token %}
+                {{ form.as_p }}
                 <label id="label11" for="username">E-mail lub nazwa użytkownika:</label>
                 <input type="text" id="username" name="username" placeholder="xyz@gmail.com" required>
                 <label id="label11" for="password">Hasło:</label>
@@ -26,7 +29,7 @@
             </form>
             <div id="linkContainer">
                 <a href="#left" id="leftLink">Nie pamiętasz hasła?</a>
-                <a href="#right" id="rightLink">Zarejestruj się</a>
+                <a href="{% url 'account_signup' %}" id="rightLink">Zarejestruj się</a>
             </div>
         </div>
     </div>
