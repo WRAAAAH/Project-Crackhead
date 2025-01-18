@@ -55,6 +55,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    #AllAuth
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'controller.urls'
@@ -83,8 +86,12 @@ WSGI_APPLICATION = 'controller.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'crackhead',
+        'USER': 'root',
+        'PASSWORD': "?EmJSnVBw9ks^tUm?eBq&e?z;]y@.#D",
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -142,7 +149,6 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'  # Redirect after successful login
 LOGOUT_REDIRECT_URL = '/'  # Redirect after logout
 
-ACCOUNT_EMAIL_VERIFICATION = 'none'  # Optional: Disable email verification
+ACCOUNT_EMAIL_VERIFICATION = 'optional'  # Optional: Disable email verification
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Allow login with username or email
-ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = True
