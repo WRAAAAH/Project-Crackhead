@@ -42,11 +42,14 @@ INSTALLED_APPS = [
 
     #my apps
     'controller',
+    'accounts',
 
     # Allauth apps
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
+    'sslserver',
 ]
 
 MIDDLEWARE = [
@@ -82,9 +85,7 @@ TEMPLATES = [
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Ensure this points to your static directory
-]
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 WSGI_APPLICATION = 'controller.wsgi.application'
 

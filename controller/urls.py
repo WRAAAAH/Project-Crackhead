@@ -21,9 +21,6 @@ from allauth.account.views import LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
-    path('accounts/', include('controller.urls')),
-    path('login/', views.AjaxLoginView.as_view(), name='account_login'),
-    path('signup/', views.AjaxSignupView.as_view(), name='account_signup'),
-    path('logout/', LogoutView.as_view(), name='account_logout'),
+    path('accounts/', include('accounts.urls')),
+    path('', views.index, name="index"),  # Main app
 ]

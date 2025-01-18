@@ -1,0 +1,13 @@
+<form id="loginForm" method="post" action="{% url 'account_login' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="id_login">Username or Email</label>
+        {{ form.login }}
+    </div>
+    <div class="mb-3">
+        <label for="id_password">Password</label>
+        {{ form.password }}
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Log In</button>
+</form>
+<div id="loginErrors" class="text-danger mt-2"></div>
