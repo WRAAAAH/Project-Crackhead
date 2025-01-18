@@ -1,4 +1,5 @@
 from allauth.account.forms import LoginForm, SignupForm
+from django.contrib.auth.models import User
 from django import forms
 
 
@@ -34,7 +35,7 @@ class CustomSignupForm(SignupForm):
     )
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)  # Call the immediate parent (SignupForm's) __init__()
         self.fields['email'].widget.attrs.update({
             'class': 'form-control',
             'placeholder': 'Email',
@@ -49,8 +50,13 @@ class CustomSignupForm(SignupForm):
         })
 
     def save(self, request):
-        user = super().save(request)
+        user = super().save(request)  # Call the parent save method
         user.first_name = self.cleaned_data['first_name']
         user.last_name = self.cleaned_data['last_name']
         user.save()
         return user
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']  # Exclude is_staff, is_superuser

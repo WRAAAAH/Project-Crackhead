@@ -1,35 +1,64 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const handleFormSubmission = (formId, url, errorDivId) => {
-        const form = document.getElementById(formId);
-        if (form) {
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
-                const formData = new FormData(form);
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.reload();
-                    } else {
-                        const errorDiv = document.getElementById(errorDivId);
-                        errorDiv.innerHTML = '';
-                        for (const field in data.errors) {
-                            data.errors[field].forEach(error => {
-                                errorDiv.innerHTML += `<p>${error}</p>`;
-                            });
-                        }
-                    }
-                });
-            });
-        }
-    };
+$('#loginForm').on('submit', function (e) {
+    e.preventDefault();
+    $.ajax({
+        url: "{% url 'account_login' %}",
+        method: "POST",
+        data: {
+            login: $('#loginUsername').val(),
+            password: $('#loginPassword').val(),
+            csrfmiddlewaretoken: document.querySelector('meta[name="csrf-token"]').content,
+        },
+        success: function (response) {
+            if (response.success) {
+                location.reload();
+            }
+        },
+        error: function (response) {
+            if (response.responseJSON && response.responseJSON.errors) {
+                $('#loginErrors').html(
+                    Object.values(response.responseJSON.errors).flat().join('<br>')
+                );
+            } else {
+                $('#loginErrors').html('An unexpected error occurred. Please try again.');
+            }
+        },
+    });
+});
 
-    handleFormSubmission('loginForm', '/accounts/login/', 'loginErrors');
-    handleFormSubmission('signupForm', '/accounts/signup/', 'signupErrors');
+$('#signupForm').on('submit', function (e) {
+    e.preventDefault(); // Prevent the default form submission behavior
+
+    // Clear any previous errors
+    $('#signupErrors').html('');
+
+    // Perform AJAX request for signup
+    $.ajax({
+        url: "{% url 'account_signup' %}", // Django's signup endpoint
+        method: "POST",
+        data: {
+            username: $('#signupUsername').val(),        // Username
+            email: $('#signupEmail').val(),              // Email
+            password1: $('#signupPassword1').val(),      // Password
+            password2: $('#signupPassword2').val(),      // Confirm Password
+            first_name: $('#signupFirstName').val(),     // First Name
+            last_name: $('#signupLastName').val(),       // Last Name
+            csrfmiddlewaretoken: document.querySelector('meta[name="csrf-token"]').content, // CSRF token
+        },
+        success: function (response) {
+            if (response.success) {
+                // Reload the page or redirect on success
+                location.reload();
+            }
+        },
+        error: function (response) {
+            // Display validation errors dynamically
+            if (response.responseJSON && response.responseJSON.errors) {
+                $('#signupErrors').html(
+                    Object.values(response.responseJSON.errors).flat().join('<br>')
+                );
+            } else {
+                $('#signupErrors').html('An unexpected error occurred. Please try again.');
+            }
+        },
+    });
 });

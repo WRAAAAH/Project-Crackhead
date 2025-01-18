@@ -1,13 +1,30 @@
-<form id="loginForm" method="post" action="{% url 'account_login' %}">
-    {% csrf_token %}
-    <div class="mb-3">
-        <label for="id_login">Username or Email</label>
-        {{ form.login }}
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Log In</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm" method="post" action="{% url 'account_login' %}">
+                    {% csrf_token %}
+                    <div id="loginErrors" class="text-danger mb-2"></div>
+
+                    <!-- Username or Email Field -->
+                    <div class="mb-3">
+                        <label for="loginUsernameOrEmail" class="form-label">Username or Email</label>
+                        <input type="text" class="form-control" id="loginUsernameOrEmail" name="login" placeholder="Enter your username or email" required>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="loginPassword" name="password" placeholder="Enter your password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Log In</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label for="id_password">Password</label>
-        {{ form.password }}
-    </div>
-    <button type="submit" class="btn btn-primary w-100">Log In</button>
-</form>
-<div id="loginErrors" class="text-danger mt-2"></div>
+</div>

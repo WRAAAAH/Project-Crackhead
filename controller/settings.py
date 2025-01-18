@@ -13,6 +13,12 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 
+def get_env_variable(var_name):
+    try:
+        return os.environ[var_name]
+    except KeyError:
+        raise RuntimeError(f"Set the {var_name} environment variable")
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-pb5!gu6!itit!e24r(lg$1=ow6_1+g9amhg$tc(9u9%vd_avo7'
+SECRET_KEY = get_env_variable('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
 
+    'django.contrib.sites',
     #my apps
     'controller',
     'accounts',
@@ -47,9 +54,10 @@ INSTALLED_APPS = [
     # Allauth apps
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
+    #'allauth.socialaccount',
 
     'sslserver',
+    'info.apps.InfoConfig'
 ]
 
 MIDDLEWARE = [
@@ -95,12 +103,12 @@ WSGI_APPLICATION = 'controller.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'crackhead',
-        'USER': 'root',
-        'PASSWORD': "?EmJSnVBw9ks^tUm?eBq&e?z;]y@.#D",
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql',  # Replace with your DB engine
+        'NAME': get_env_variable('DB_NAME'),
+        'USER': get_env_variable('DB_USER'),
+        'PASSWORD': get_env_variable('DB_PASSWORD'),
+        'HOST': get_env_variable('DB_HOST'),
+        'PORT': get_env_variable('DB_PORT'),
     }
 }
 
@@ -145,7 +153,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -161,11 +169,29 @@ LOGOUT_REDIRECT_URL = '/'  # Redirect after logout
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Optional: Disable email verification
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Allow login with username or email
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.your-email-provider.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your-email@example.com'
-EMAIL_HOST_PASSWORD = 'your-email-password'
-DEFAULT_FROM_EMAIL = 'Your Site <noreply@yourdomain.com>'
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
+#UNCOMMENT WHEN IN NEED OF EMAILS
+
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_HOST = 'smtp.gmail.com'
+#EMAIL_PORT = 587
+#EMAIL_USE_TLS = True
+#EMAIL_HOST_USER = ''
+#EMAIL_HOST_PASSWORD = 'your-email-password'
+#DEFAULT_FROM_EMAIL = 'Your Site <noreply@yourdomain.com>'
+
+ACCOUNT_FORMS = {
+    'login': 'accounts.forms.CustomLoginForm',
+    'signup': 'accounts.forms.CustomSignupForm',
+}
+
+#UNCOMMENT WHEN IN NEED OF SECURITY
+
+# SECURE_BROWSER_XSS_FILTER = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# SECURE_HSTS_SECONDS = 3600  # Adjust as needed
+# SECURE_SSL_REDIRECT = True
