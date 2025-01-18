@@ -1,5 +1,5 @@
 #loginPopup {
-  display: none;
+  /* display: none; */
   position: fixed;
   top: 50%;
   left: 50%;
@@ -11,7 +11,7 @@
   background-color:#dfd9d5;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   border-radius: 17px;
-  opacity: 0;
+  /* opacity: 0; */
   transition: opacity 0.3s ease, transform 0.3s ease;
   z-index: 9999;
   filter: none!important;
