@@ -1,0 +1,7 @@
+<!-- templates/account/signup_form.html -->
+<form id="signupForm">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Sign Up</button>
+</form>
+<div id="signupErrors" class="text-danger mt-2"></div>

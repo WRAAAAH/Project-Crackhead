@@ -157,6 +157,14 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'  # Redirect after successful login
 LOGOUT_REDIRECT_URL = '/'  # Redirect after logout
 
-ACCOUNT_EMAIL_VERIFICATION = 'optional'  # Optional: Disable email verification
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Optional: Disable email verification
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Allow login with username or email
 ACCOUNT_EMAIL_REQUIRED = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.your-email-provider.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your-email@example.com'
+EMAIL_HOST_PASSWORD = 'your-email-password'
+DEFAULT_FROM_EMAIL = 'Your Site <noreply@yourdomain.com>'

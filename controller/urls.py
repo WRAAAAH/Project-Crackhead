@@ -17,10 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from allauth.account.views import LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('account/', include('allauth.urls')),
-    path('login/', views.login, name='login'),
+    path('accounts/', include('controller.urls')),
+    path('login/', views.AjaxLoginView.as_view(), name='account_login'),
+    path('signup/', views.AjaxSignupView.as_view(), name='account_signup'),
+    path('logout/', LogoutView.as_view(), name='account_logout'),
 ]
