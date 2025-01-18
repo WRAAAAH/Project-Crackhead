@@ -1,0 +1,15 @@
+<!-- controller/templates/controller/index.html -->
+{% extends "base.html" %}
+
+{% block title %}Home - Project Crackhead{% endblock %}
+
+{% block content %}
+    <h1>Welcome to Project Crackhead!</h1>
+    <p>This is the homepage of your awesome Django project.</p>
+
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}! You are logged in.</p>
+    {% else %}
+        <p>Please log in or sign up to continue.</p>
+    {% endif %}
+{% endblock %}

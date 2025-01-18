@@ -1,0 +1,54 @@
+<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="signupModalLabel">Sign Up</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm">
+                    <!-- Display validation errors -->
+                    <div id="signupErrors" class="text-danger mb-2"></div>
+
+                    <!-- Username Field -->
+                    <div class="mb-3">
+                        <label for="signupUsername" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="signupUsername" name="username" placeholder="Choose a username" required>
+                    </div>
+
+                    <!-- First Name Field -->
+                    <div class="mb-3">
+                        <label for="signupFirstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="signupFirstName" name="first_name" placeholder="Enter your first name" required>
+                    </div>
+
+                    <!-- Last Name Field -->
+                    <div class="mb-3">
+                        <label for="signupLastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="signupLastName" name="last_name" placeholder="Enter your last name" required>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="mb-3">
+                        <label for="signupEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="signupEmail" name="email" placeholder="Enter your email" required>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="mb-3">
+                        <label for="signupPassword1" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="signupPassword1" name="password1" placeholder="Choose a password" required>
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div class="mb-3">
+                        <label for="signupPassword2" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="signupPassword2" name="password2" placeholder="Re-enter the password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary w-100">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
