@@ -1,6 +1,5 @@
-#Python virtual environment
+#Python virtual env
 .venv
 
-#database file(useless?)
+#Database file(useless?)
 db.sqlite3
-
