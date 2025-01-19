@@ -1,1 +1,1 @@
-Nigeryjscy biegacze(niektórzy) nie bigają
+Nigeryjscy biegacze(niektórzy) nie biegają
