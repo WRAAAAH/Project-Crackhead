@@ -6,47 +6,30 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <div id="signupErrors" class="text-danger mb-3"></div>
                 <form id="signupForm">
-                    <!-- Display validation errors -->
-                    <div id="signupErrors" class="text-danger mb-2"></div>
-
-                    <!-- Username Field -->
+                    {% csrf_token %}
                     <div class="mb-3">
-                        <label for="signupUsername" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="signupUsername" name="username" placeholder="Choose a username" required>
+                        <label for="id_first_name" class="form-label">First Name</label>
+                        {{ form.first_name }}
                     </div>
-
-                    <!-- First Name Field -->
                     <div class="mb-3">
-                        <label for="signupFirstName" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="signupFirstName" name="first_name" placeholder="Enter your first name" required>
+                        <label for="id_last_name" class="form-label">Last Name</label>
+                        {{ form.last_name }}
                     </div>
-
-                    <!-- Last Name Field -->
                     <div class="mb-3">
-                        <label for="signupLastName" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="signupLastName" name="last_name" placeholder="Enter your last name" required>
+                        <label for="id_email" class="form-label">Email</label>
+                        {{ form.email }}
                     </div>
-
-                    <!-- Email Field -->
                     <div class="mb-3">
-                        <label for="signupEmail" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="signupEmail" name="email" placeholder="Enter your email" required>
+                        <label for="id_password1" class="form-label">Password</label>
+                        {{ form.password1 }}
                     </div>
-
-                    <!-- Password Field -->
                     <div class="mb-3">
-                        <label for="signupPassword1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="signupPassword1" name="password1" placeholder="Choose a password" required>
+                        <label for="id_password2" class="form-label">Confirm Password</label>
+                        {{ form.password2 }}
                     </div>
-
-                    <!-- Confirm Password Field -->
-                    <div class="mb-3">
-                        <label for="signupPassword2" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="signupPassword2" name="password2" placeholder="Re-enter the password" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-secondary w-100">Sign Up</button>
+                    <button type="submit" class="btn btn-primary w-100">Sign Up</button>
                 </form>
             </div>
         </div>

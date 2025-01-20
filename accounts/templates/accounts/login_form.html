@@ -10,16 +10,20 @@
                     {% csrf_token %}
                     <div id="loginErrors" class="text-danger mb-2"></div>
 
-                    <!-- Username or Email Field -->
                     <div class="mb-3">
-                        <label for="loginUsernameOrEmail" class="form-label">Username or Email</label>
-                        <input type="text" class="form-control" id="loginUsernameOrEmail" name="login" placeholder="Enter your username or email" required>
+                        <label for="id_login" class="form-label">e-mail</label>
+                        {{ form.email }}
                     </div>
 
                     <!-- Password Field -->
                     <div class="mb-3">
-                        <label for="loginPassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="loginPassword" name="password" placeholder="Enter your password" required>
+                        <label for="id_password" class="form-label">Password</label>
+                        {{ form.password }}
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <label class="form-check-label" for="id_remember">Remember Me</label>
+                        {{ form.remember }}
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100">Log In</button>

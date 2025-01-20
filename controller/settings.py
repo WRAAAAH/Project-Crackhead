@@ -163,14 +163,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #Allauth settings
 SITE_ID = 1
 
-LOGIN_REDIRECT_URL = '/'  # Redirect after successful login
-LOGOUT_REDIRECT_URL = '/'  # Redirect after logout
+ACCOUNT_LOGOUT_ON_GET = False
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_SIGNUP_REDIRECT_URL = '/'
 
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Optional: Disable email verification
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Allow login with username or email
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = True
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/"
 
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
@@ -195,3 +200,11 @@ ACCOUNT_FORMS = {
 # SECURE_CONTENT_TYPE_NOSNIFF = True
 # SECURE_HSTS_SECONDS = 3600  # Adjust as needed
 # SECURE_SSL_REDIRECT = True
+
+#cookies
+
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
+#SESSION_COOKIE_SECURE = True  # Use HTTPS in production
+SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript from accessing the cookie
+SESSION_COOKIE_SAMESITE = 'Lax'  # Prevent CSRF with third-party sites
+SESSION_SAVE_EVERY_REQUEST = True  # Refresh session on every request
