@@ -2,53 +2,55 @@ from allauth.account.models import EmailAddress
 from allauth.account.views import LoginView, SignupView, LogoutView
 from django.http import JsonResponse
 from .forms import CustomLoginForm, CustomSignupForm
-from ratelimit.decorators import ratelimit
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from rest_framework.views import APIView  # Use this if needed
+
 
 class AjaxLoginView(LoginView):
-    form_class = CustomLoginForm  # Add this line for consistency with SignupView
-
-    @ratelimit(key='ip', rate='5/m', block=True)
+    form_class = CustomLoginForm
     def form_invalid(self, form):
         # Return errors as JSON for AJAX requests
         return JsonResponse({'errors': form.errors}, status=400)
 
-    @ratelimit(key='ip', rate='5/m', block=True)
     def form_valid(self, form):
-        user = form.get_user()
+        email = form.cleaned_data.get('login')  # The 'login' field contains the email
 
-        remember_me = form.cleaned_data.get('remember', False)
-
-        email_verified = EmailAddress.objects.filter(user=user, verified=True).exists()
-        if not email_verified:
+        try:
+            email_address = EmailAddress.objects.get(email=email)
+        except EmailAddress.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Invalid email or password.',
+            }, status=400)
+        if not email_address.verified:
             return JsonResponse({
                 'success': False,
                 'email_verification_required': True,
                 'message': 'Your email address has not been verified. Please check your inbox.',
-                'redirect_url': '/accounts/confirm-email/'
             }, status=400)
-
+        # Handle 'remember me' functionality
+        remember_me = form.cleaned_data.get('remember', False)
         if remember_me:
-            # Set a persistent session (e.g., 30 days)
-            self.request.session.set_expiry(60 * 60 * 24 * 30)
+            self.request.session.set_expiry(60 * 60 * 24 * 30)  # 30 days
         else:
-            # Set session to expire when the browser is closed
-            self.request.session.set_expiry(0)
+            self.request.session.set_expiry(0)  # Session expires on browser close
+
+        # Proceed with the normal login process
         response = super().form_valid(form)
         return JsonResponse({'success': True})
-
 
 
 class AjaxSignupView(SignupView):
     form_class = CustomSignupForm
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]  # Apply throttling here
 
-    @ratelimit(key='ip', rate='5/m', block=True)
     def form_invalid(self, form):
         return JsonResponse({'errors': form.errors}, status=400)
 
-    @ratelimit(key='ip', rate='5/m', block=True)
     def form_valid(self, form):
         response = super().form_valid(form)
         return JsonResponse({'success': True})
+
 
 class CustomAjaxLogoutView(LogoutView):
     def post(self, *args, **kwargs):
@@ -56,3 +58,4 @@ class CustomAjaxLogoutView(LogoutView):
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({'success': True, 'message': 'Logout successful!'})
         return response
+

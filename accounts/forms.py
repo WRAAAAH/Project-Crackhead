@@ -1,20 +1,18 @@
 import uuid
 from allauth.account.forms import LoginForm, SignupForm
 from django import forms
-from django.contrib.auth import password_validation
 from django.utils.text import slugify
 
 
 class CustomLoginForm(LoginForm):
-    emailLog = forms.EmailField(
+    login = forms.EmailField(
         max_length=254,
         required=True,
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
             'placeholder': 'Email',
-            'autocomplete': 'email',
-            'autofocus': True,
         }),
+        label="Email",
     )
     password = forms.CharField(
         required=True,
@@ -61,25 +59,19 @@ class CustomSignupForm(SignupForm):
             'autocomplete': 'email',
         }),
     )
-    password1 = forms.CharField(
-        label="Password",
-        required=True,
-        widget=forms.PasswordInput(attrs={
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['password1'].widget = forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Enter Password',
-            'autocomplete': 'new-password',
-        }),
-        help_text=password_validation.password_validators_help_text_html(),  # Built-in password validators
-    )
-    password2 = forms.CharField(
-        label="Confirm Password",
-        required=True,
-        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Create password',
+        })
+
+        self.fields['password2'].widget = forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Confirm Password',
-            'autocomplete': 'new-password',
-        }),
-    )
+            'placeholder': 'Confirm password',
+        })
 
     def clean_password2(self):
         """
@@ -88,20 +80,23 @@ class CustomSignupForm(SignupForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords do not match.")
+            raise forms.ValidationError("The two passwords you entered do not match. Please try again.")
         return password2
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     def save(self, request):
         user = super().save(request)
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
+        for field in ['first_name', 'last_name']:
+            if field in self.cleaned_data:
+                setattr(user, field, self.cleaned_data[field])
 
         # Auto-generate a unique username
         base_username = slugify(self.cleaned_data['email'].split('@')[0])  # Use part of email as base
-        unique_username = f"{base_username}-{uuid.uuid4().hex[:6]}"  # Append a unique hash
+        unique_username = base_username
+        while True:  # Ensure username is unique
+            if not user._meta.model.objects.filter(username=unique_username).exists():
+                break
+            unique_username = f"{base_username}-{uuid.uuid4().hex[:6]}"
         user.username = unique_username
 
         user.save()

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 
+
 def get_env_variable(var_name):
     try:
         return os.environ[var_name]
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'rest_framework',
 
     'django.contrib.sites',
     #my apps
@@ -59,6 +61,18 @@ INSTALLED_APPS = [
     'sslserver',
     'info.apps.InfoConfig'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',  # Throttle for anonymous users
+        'rest_framework.throttling.UserRateThrottle',  # Throttle for authenticated users
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/min',  # 5 requests per minute for anonymous users
+        'user': '10/min',  # 10 requests per minute for authenticated users
+    },
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

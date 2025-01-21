@@ -1,31 +1,40 @@
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            <!-- Modal Header -->
             <div class="modal-header">
                 <h5 class="modal-title" id="loginModalLabel">Log In</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+
+            <!-- Modal Body -->
             <div class="modal-body">
-                <form id="loginForm" method="post" action="{% url 'account_login' %}">
+                <!-- Login Form -->
+                <form id="loginForm" method="post">
                     {% csrf_token %}
+
+                    <!-- Error Container -->
                     <div id="loginErrors" class="text-danger mb-2"></div>
 
+                    <!-- Email or Username Field -->
                     <div class="mb-3">
-                        <label for="id_login" class="form-label">e-mail</label>
-                        {{ form.emailLog }}
+                        <label for=id_login_email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="id_login_email" name="email" placeholder="Enter your email" required>
                     </div>
 
                     <!-- Password Field -->
                     <div class="mb-3">
                         <label for="id_password" class="form-label">Password</label>
-                        {{ form.password }}
+                        <input type="password" class="form-control" id="id_password" name="password" placeholder="Enter your password" required>
                     </div>
 
+                    <!-- Remember Me Checkbox -->
                     <div class="form-check mb-3">
+                        <input type="checkbox" class="form-check-input" id="id_remember" name="remember">
                         <label class="form-check-label" for="id_remember">Remember Me</label>
-                        {{ form.remember }}
                     </div>
 
+                    <!-- Submit Button -->
                     <button type="submit" class="btn btn-primary w-100">Log In</button>
                 </form>
             </div>
