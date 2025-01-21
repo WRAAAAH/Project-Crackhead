@@ -1,16 +1,19 @@
 import uuid
 from allauth.account.forms import LoginForm, SignupForm
 from django import forms
+from django.contrib.auth import password_validation
 from django.utils.text import slugify
 
 
 class CustomLoginForm(LoginForm):
-    email = forms.EmailField(
+    emailLog = forms.EmailField(
         max_length=254,
         required=True,
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
             'placeholder': 'Email',
+            'autocomplete': 'email',
+            'autofocus': True,
         }),
     )
     password = forms.CharField(
@@ -54,23 +57,42 @@ class CustomSignupForm(SignupForm):
         required=True,
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Email',
+            'placeholder': 'Email Address',
+            'autocomplete': 'email',
         }),
     )
     password1 = forms.CharField(
+        label="Password",
         required=True,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Password',
+            'placeholder': 'Enter Password',
+            'autocomplete': 'new-password',
         }),
+        help_text=password_validation.password_validators_help_text_html(),  # Built-in password validators
     )
     password2 = forms.CharField(
+        label="Confirm Password",
         required=True,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'placeholder': 'Confirm Password',
+            'autocomplete': 'new-password',
         }),
     )
+
+    def clean_password2(self):
+        """
+        Ensure password1 and password2 match.
+        """
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords do not match.")
+        return password2
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     def save(self, request):
         user = super().save(request)
@@ -84,6 +106,3 @@ class CustomSignupForm(SignupForm):
 
         user.save()
         return user
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)

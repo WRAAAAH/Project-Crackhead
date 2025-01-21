@@ -122,6 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length': 8},
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -176,6 +177,7 @@ ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/"
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
