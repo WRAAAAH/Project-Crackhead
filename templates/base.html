@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,16 +9,22 @@
     <!-- Add Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'accounts/js/accounts.js' %}" defer></script>
     <!-- Add CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token }}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">My Project</a>
             <div>
-                <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-                <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</button>
+                {% if user.is_authenticated %}
+                    <span>Welcome back!</span>
+                    <button class="btn btn-outline-primary" type="button" id="logout" onclick="logoutUser()">Logout</button>
+                {% else %}
+                    <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                    <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</button>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -25,89 +32,16 @@
     <!-- Main Content -->
     <div class="container mt-5">
         {% block content %}
-        <!-- Your app-specific content goes here -->
+
         {% endblock %}
     </div>
 
     <!-- Login Modal -->
-    {% include 'accounts/login_form.html' %}
-
+    {% render_login_form %}
     <!-- Signup Modal -->
-    {% include 'accounts/signup_form.html' %}
+    {% render_signup_form %}
 
     <!-- Add jQuery for AJAX -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#signupForm').on('submit', function (e) {
-                e.preventDefault(); // Prevent default form submission
-
-                // Clear previous errors
-                $('#signupErrors').html('');
-
-                // Perform AJAX request for signup
-                $.ajax({
-                    url: "{% url 'account_signup' %}",  // Django processes the URL tag here
-                    method: "POST",
-                    data: {
-                        username: $('#signupUsername').val(),
-                        email: $('#signupEmail').val(),
-                        password1: $('#signupPassword1').val(),
-                        password2: $('#signupPassword2').val(),
-                        first_name: $('#signupFirstName').val(),
-                        last_name: $('#signupLastName').val(),
-                        csrfmiddlewaretoken: document.querySelector('meta[name="csrf-token"]').content,
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            location.reload(); // Reload on success
-                        }
-                    },
-                    error: function (response) {
-                        if (response.responseJSON && response.responseJSON.errors) {
-                            $('#signupErrors').html(
-                                Object.values(response.responseJSON.errors).flat().join('<br>')
-                            );
-                        } else {
-                            $('#signupErrors').html('An unexpected error occurred. Please try again.');
-                        }
-                    },
-                });
-            });
-        });
-        $('#loginForm').on('submit', function (e) {
-    e.preventDefault(); // Prevent the default form submission
-
-    // Clear previous errors
-    $('#loginErrors').html('');
-
-    // Perform AJAX request for login
-    $.ajax({
-        url: "{% url 'account_login' %}",  // Django's login endpoint
-        method: "POST",
-        data: {
-            login: $('#loginUsernameOrEmail').val(),  // Username or email
-            password: $('#loginPassword').val(),     // Password
-            csrfmiddlewaretoken: document.querySelector('input[name=csrfmiddlewaretoken]').value, // CSRF token
-        },
-        success: function (response) {
-            if (response.success) {
-                // On successful login, reload the page or redirect to a dashboard
-                location.reload();
-            }
-        },
-        error: function (response) {
-            // Display validation errors
-            if (response.responseJSON && response.responseJSON.errors) {
-                $('#loginErrors').html(
-                    Object.values(response.responseJSON.errors).flat().join('<br>')
-                );
-            } else {
-                $('#loginErrors').html('Invalid username or password.');
-            }
-        },
-    });
-});
-</script>
 </body>
 </html>

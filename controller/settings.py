@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 
+
 def get_env_variable(var_name):
     try:
         return os.environ[var_name]
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'rest_framework',
 
     'django.contrib.sites',
     #my apps
@@ -59,6 +61,18 @@ INSTALLED_APPS = [
     'sslserver',
     'info.apps.InfoConfig'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',  # Throttle for anonymous users
+        'rest_framework.throttling.UserRateThrottle',  # Throttle for authenticated users
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/min',  # 5 requests per minute for anonymous users
+        'user': '10/min',  # 10 requests per minute for authenticated users
+    },
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -122,6 +136,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length': 8},
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -163,14 +178,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #Allauth settings
 SITE_ID = 1
 
-LOGIN_REDIRECT_URL = '/'  # Redirect after successful login
-LOGOUT_REDIRECT_URL = '/'  # Redirect after logout
-
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Optional: Disable email verification
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Allow login with username or email
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_SIGNUP_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = True
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/"
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
@@ -191,7 +212,15 @@ ACCOUNT_FORMS = {
 
 #UNCOMMENT WHEN IN NEED OF SECURITY
 
-# SECURE_BROWSER_XSS_FILTER = True
-# SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
 # SECURE_HSTS_SECONDS = 3600  # Adjust as needed
 # SECURE_SSL_REDIRECT = True
+
+#cookies
+
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
+#SESSION_COOKIE_SECURE = True  # Use HTTPS in production
+SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript from accessing the cookie
+SESSION_COOKIE_SAMESITE = 'Lax'  # Prevent CSRF with third-party sites
+SESSION_SAVE_EVERY_REQUEST = True  # Refresh session on every request

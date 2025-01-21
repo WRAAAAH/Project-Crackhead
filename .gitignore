@@ -3,3 +3,5 @@
 
 #Database file(useless?)
 db.sqlite3
+backup.sql
+db_backup.sql

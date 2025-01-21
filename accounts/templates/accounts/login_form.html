@@ -1,27 +1,39 @@
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            <!-- Modal Header -->
             <div class="modal-header">
                 <h5 class="modal-title" id="loginModalLabel">Log In</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id="loginForm" method="post" action="{% url 'account_login' %}">
-                    {% csrf_token %}
-                    <div id="loginErrors" class="text-danger mb-2"></div>
 
-                    <!-- Username or Email Field -->
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form id="loginForm" method="post">
+                    {% csrf_token %}
+
+                    <!-- Error Container -->
+                    <div id="loginErrors" class="text-danger mb-3"></div>
+
+                    <!-- Email or Username Field -->
                     <div class="mb-3">
-                        <label for="loginUsernameOrEmail" class="form-label">Username or Email</label>
-                        <input type="text" class="form-control" id="loginUsernameOrEmail" name="login" placeholder="Enter your username or email" required>
+                        <label for="id_login_email" class="form-label">Email or Username</label>
+                        <input type="text" class="form-control" id="id_login_email" name="login" placeholder="Email or Username" required>
                     </div>
 
                     <!-- Password Field -->
                     <div class="mb-3">
-                        <label for="loginPassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="loginPassword" name="password" placeholder="Enter your password" required>
+                        <label for="id_password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="id_password" name="password" placeholder="Password" required>
                     </div>
 
+                    <!-- Remember Me Checkbox -->
+                    <div class="form-check mb-3">
+                        <input type="checkbox" class="form-check-input" id="id_remember" name="remember">
+                        <label class="form-check-label" for="id_remember">Remember Me</label>
+                    </div>
+
+                    <!-- Submit Button -->
                     <button type="submit" class="btn btn-primary w-100">Log In</button>
                 </form>
             </div>

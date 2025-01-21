@@ -1,19 +1,67 @@
+import uuid
 from allauth.account.forms import LoginForm, SignupForm
-from django.contrib.auth.models import User
 from django import forms
+from django.utils.text import slugify
+from django.contrib.auth import authenticate
 
 
 class CustomLoginForm(LoginForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['login'].widget.attrs.update({
+    login = forms.EmailField(
+        max_length=254,
+        required=True,
+        widget=forms.EmailInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Username or Email',
-        })
-        self.fields['password'].widget.attrs.update({
+            'placeholder': 'Email',
+        }),
+        label="Email",
+    )
+    password = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'placeholder': 'Password',
-        })
+        }),
+    )
+    remember = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+        }),
+        label="Remember Me"
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        """
+        This method validates the form and authenticates the user.
+        """
+        cleaned_data = super().clean()
+
+        # Authenticate the user
+        login = cleaned_data.get('login')  # Email or username
+        password = cleaned_data.get('password')
+
+        # Attempt to authenticate the user
+        self.user_cache = authenticate(
+            username=login,  # Allauth accepts both email and username
+            password=password,
+        )
+
+        # Check if the authentication was successful
+        if self.user_cache is None:
+            raise forms.ValidationError("Invalid login credentials. Please try again.")
+        elif not self.user_cache.is_active:
+            raise forms.ValidationError("This account is inactive.")
+
+        return cleaned_data
+
+    def get_user(self):
+        """
+        Returns the authenticated user object.
+        """
+        return self.user_cache
 
 
 class CustomSignupForm(SignupForm):
@@ -23,7 +71,7 @@ class CustomSignupForm(SignupForm):
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'First Name',
-        })
+        }),
     )
     last_name = forms.CharField(
         max_length=30,
@@ -31,32 +79,56 @@ class CustomSignupForm(SignupForm):
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Last Name',
-        })
+        }),
+    )
+    email = forms.EmailField(
+        max_length=254,
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Email Address',
+            'autocomplete': 'email',
+        }),
     )
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)  # Call the immediate parent (SignupForm's) __init__()
-        self.fields['email'].widget.attrs.update({
+        super().__init__(*args, **kwargs)
+
+        self.fields['password1'].widget = forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Email',
+            'placeholder': 'Create password',
         })
-        self.fields['password1'].widget.attrs.update({
+
+        self.fields['password2'].widget = forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Password',
+            'placeholder': 'Confirm password',
         })
-        self.fields['password2'].widget.attrs.update({
-            'class': 'form-control',
-            'placeholder': 'Confirm Password',
-        })
+
+    def clean_password2(self):
+        """
+        Ensure password1 and password2 match.
+        """
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("The two passwords you entered do not match. Please try again.")
+        return password2
+
 
     def save(self, request):
-        user = super().save(request)  # Call the parent save method
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
+        user = super().save(request)
+        for field in ['first_name', 'last_name']:
+            if field in self.cleaned_data:
+                setattr(user, field, self.cleaned_data[field])
+
+        # Auto-generate a unique username
+        base_username = slugify(self.cleaned_data['email'].split('@')[0])  # Use part of email as base
+        unique_username = base_username
+        while True:  # Ensure username is unique
+            if not user._meta.model.objects.filter(username=unique_username).exists():
+                break
+            unique_username = f"{base_username}-{uuid.uuid4().hex[:6]}"
+        user.username = unique_username
+
         user.save()
         return user
-
-class UserUpdateForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['username', 'email']  # Exclude is_staff, is_superuser
