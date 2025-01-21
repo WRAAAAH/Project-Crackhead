@@ -14,12 +14,17 @@
     <meta name="csrf-token" content="{{ csrf_token }}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">My Project</a>
             <div>
-                <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-                <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</button>
+                {% if user.is_authenticated %}
+                    <span>Welcome back!</span>
+                    <button class="btn btn-outline-primary" type="button" id="logout" onclick="logoutUser()">Logout</button>
+                {% else %}
+                    <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                    <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</button>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -33,7 +38,6 @@
 
     <!-- Login Modal -->
     {% render_login_form %}
-
     <!-- Signup Modal -->
     {% render_signup_form %}
 

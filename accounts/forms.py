@@ -2,6 +2,7 @@ import uuid
 from allauth.account.forms import LoginForm, SignupForm
 from django import forms
 from django.utils.text import slugify
+from django.contrib.auth import authenticate
 
 
 class CustomLoginForm(LoginForm):
@@ -31,6 +32,36 @@ class CustomLoginForm(LoginForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def clean(self):
+        """
+        This method validates the form and authenticates the user.
+        """
+        cleaned_data = super().clean()
+
+        # Authenticate the user
+        login = cleaned_data.get('login')  # Email or username
+        password = cleaned_data.get('password')
+
+        # Attempt to authenticate the user
+        self.user_cache = authenticate(
+            username=login,  # Allauth accepts both email and username
+            password=password,
+        )
+
+        # Check if the authentication was successful
+        if self.user_cache is None:
+            raise forms.ValidationError("Invalid login credentials. Please try again.")
+        elif not self.user_cache.is_active:
+            raise forms.ValidationError("This account is inactive.")
+
+        return cleaned_data
+
+    def get_user(self):
+        """
+        Returns the authenticated user object.
+        """
+        return self.user_cache
 
 
 class CustomSignupForm(SignupForm):

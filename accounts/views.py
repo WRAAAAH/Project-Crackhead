@@ -3,7 +3,8 @@ from allauth.account.views import LoginView, SignupView, LogoutView
 from django.http import JsonResponse
 from .forms import CustomLoginForm, CustomSignupForm
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
-from rest_framework.views import APIView  # Use this if needed
+from django.contrib.auth import login as auth_login
+
 
 
 class AjaxLoginView(LoginView):
@@ -35,9 +36,18 @@ class AjaxLoginView(LoginView):
         else:
             self.request.session.set_expiry(0)  # Session expires on browser close
 
+        user = form.get_user()
+        auth_login(self.request, user)
         # Proceed with the normal login process
         response = super().form_valid(form)
-        return JsonResponse({'success': True})
+        return JsonResponse({
+            'success': True,
+            'user': {
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+            },
+        })
 
 
 class AjaxSignupView(SignupView):
@@ -52,10 +62,12 @@ class AjaxSignupView(SignupView):
         return JsonResponse({'success': True})
 
 
-class CustomAjaxLogoutView(LogoutView):
+class AjaxLogoutView(LogoutView):
     def post(self, *args, **kwargs):
-        response = super().post(*args, **kwargs)
+        super().post(*args, **kwargs)
+
         if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({'success': True, 'message': 'Logout successful!'})
-        return response
+
+        return JsonResponse({'success': True, 'message': 'Logged out successfully!'})
 
