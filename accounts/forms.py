@@ -34,18 +34,15 @@ class CustomLoginForm(LoginForm):
         super().__init__(*args, **kwargs)
 
     def clean(self):
-        """
-        This method validates the form and authenticates the user.
-        """
         cleaned_data = super().clean()
 
         # Authenticate the user
-        login = cleaned_data.get('login')  # Email or username
+        login = cleaned_data.get('login')
         password = cleaned_data.get('password')
 
         # Attempt to authenticate the user
         self.user_cache = authenticate(
-            username=login,  # Allauth accepts both email and username
+            username=login,
             password=password,
         )
 
@@ -58,9 +55,6 @@ class CustomLoginForm(LoginForm):
         return cleaned_data
 
     def get_user(self):
-        """
-        Returns the authenticated user object.
-        """
         return self.user_cache
 
 
