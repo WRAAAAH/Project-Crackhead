@@ -9,6 +9,15 @@ from django.contrib.auth import login as auth_login
 
 class AjaxLoginView(LoginView):
     form_class = CustomLoginForm
+
+    def post(self, request, *args, **kwargs):
+        # Initialize the form with POST data
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
     def form_invalid(self, form):
         # Return errors as JSON for AJAX requests
         return JsonResponse({'errors': form.errors}, status=400)
