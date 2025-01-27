@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     signupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const signupErrors = document.querySelector('#signupErrors');
-        signupErrors.innerHTML = '';
+        /* const signupErrors = document.querySelector('#signupErrors');
+        signupErrors.innerHTML = ''; */
 
         const csrfToken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
         const first_name = document.querySelector('#id_first_name').value;

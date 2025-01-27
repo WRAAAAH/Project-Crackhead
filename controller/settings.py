@@ -208,6 +208,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 ACCOUNT_FORMS = {
     'login': 'accounts.forms.CustomLoginForm',
     'signup': 'accounts.forms.CustomSignupForm',
+    'reset_password': 'accounts.forms.CustomResetPasswordForm',
 }
 
 #UNCOMMENT WHEN IN NEED OF SECURITY

@@ -4,12 +4,13 @@
 {% block title %}Home - Project Crackhead{% endblock %}
 
 {% block content %}
-    <h1>Welcome to Project Crackhead!</h1>
-    <p>This is the homepage of your awesome Django project.</p>
+    <main>
+        <div class="main-container">
+              <h1>Welcome to My Website</h1>
+              <p>Some content here. When the popup is opened, everything behind it (except for the nav) gets blurred and darkened.</p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, at?</p>
+              <!-- Add more content as needed -->
+        </div>
+    </main>
 
-    {% if user.is_authenticated %}
-        <p>Hello, {{ user.username }}! You are logged in.</p>
-    {% else %}
-        <p>Please log in or sign up to continue.</p>
-    {% endif %}
 {% endblock %}
