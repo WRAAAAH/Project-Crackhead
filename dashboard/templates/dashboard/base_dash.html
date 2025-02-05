@@ -1,0 +1,103 @@
+{% load static %}
+{% csrf_token %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INF_Prospect</title>
+  <link rel="stylesheet" href="{% static 'dashboard/css/postlog.css' %}" />
+    <script src="{% static 'accounts/js/accounts.js' %}" defer></script>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">INF_Prospect</div>
+    <button class="hamburger" id="hamburger">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </header>
+
+  <!-- Slide-out Menu (Hamburger Options) -->
+  <nav class="slide-menu" id="slide-menu">
+    <ul id="listburgr">
+      <li id="entr1"><a href="{% url 'index' %}" id="burgr1">Strona główna</a></li>
+      <li id="entr2"><a href="{% url 'dashboard_main' %}" id="burgr2">Dashboard</a></li>
+      <li id="entr3"><a href="{% url 'dashboard_account' %}" id="burgr3">Moje konto</a></li>
+      <li id="entr4"><a href="#" id="burgr4" onclick="logoutUser()">Wyloguj</a></li>
+    </ul>
+  </nav>
+
+  <!-- Wrapper for Sidebar and Main Content -->
+  <div class="content-wrapper">
+
+    <!-- Sidebar (User Account Info) -->
+    <aside class="sidebar">
+
+      <div class="user-info">
+
+        <!-- REFCODE-->
+        <div id="refcode-side">
+          <h4>ZAPROŚ ZNAJOMEGO</h4></div>
+          <a href="{% url 'dashboard_reflink' %}" id="link-spacer-up" style="display: block; text-decoration: none;">
+            <p>Twój unikatowy kod polecenia</p>
+          </a>
+        <br>
+
+
+        <!-- LAB ENV ALWAYS DISPLAYED-->
+        <div id="rentLab-side">
+          <h4>ŚRODOWISKO LABOWE</h4></div>
+          <a href="{% url 'dashboard_labconfig' %}" id="link-spacer-up" style="display: block; text-decoration: none;">
+            <p>Konfigurator środowiska</p>
+          </a>
+        <br>
+         <!-- INF02 IF DISPLAYED W DJANGO-->
+        <div id="inf2-side"><h4>INF.02</h4></div>
+        <a href="{% url 'dashboard_pytania_02' %}" id="link-spacer" style="display: block; text-decoration: none;">
+          <p>Baza pytań</p>
+        </a>
+        <a href="{% url 'dashboard_full_videos_02' %}" id="link-spacer" style="display: block; text-decoration: none;">
+          <p>Pełny kurs wideo</p>
+        </a>
+        <a href="{% url 'dashboard_short_videos_02' %}" id="link-spacer" style="display: block; text-decoration: none;">
+          <p>Filmiki instruktażowe</p>
+        </a>
+        <a href="{% url 'dashboard_arkusz_02' %}" id="link-spacer" style="display: block; text-decoration: none;">
+          <p>Rozwiązywanie arkuszy</p>
+        </a>
+        <br>
+        <!-- INF03 IF DISPLAYED W DJANGO-->
+        <div id="inf3-side"><h4>INF.03</h4></div>
+        <a href="{% url 'dashboard_pytania_03' %}" id="link-spacer" style="display: block; text-decoration: none;">
+          <p>Baza pytań</p>
+        </a>
+        <a href="{% url 'dashboard_full_videos_03' %}" id="link-spacer" style="display: block; text-decoration: none;">
+          <p>Pełny kurs wideo</p>
+        </a>
+        <a href="{% url 'dashboard_short_videos_03' %}" id="link-spacer" style="display: block; text-decoration: none;">
+          <p>Filmiki instruktażowe</p>
+        </a>
+        <a href="{% url 'dashboard_arkusz_03' %}" id="link-spacer" style="display: block; text-decoration: none;">
+          <p>Rozwiązywanie arkuszy</p>
+        </a>
+      </div>
+    </aside>
+
+      <!-- Main section -->
+  {% block content %}
+
+  {% endblock %}
+  </div>
+
+  <footer id="footer" class="footer-minimal">
+    <div class="footer-minimal-text">
+      <a href="#">Polityka prywatności</a> | <a href="#">Regulamin</a>
+    </div>
+  </footer>
+
+  <script src="{% static 'dashboard/js/postlog.js' %}"></script>
+</body>
+</html>

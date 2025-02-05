@@ -59,7 +59,8 @@ INSTALLED_APPS = [
     #'allauth.socialaccount',
 
     'sslserver',
-    'info.apps.InfoConfig'
+    'info.apps.InfoConfig',
+    'dashboard.apps.DashboardConfig'
 ]
 
 REST_FRAMEWORK = {
@@ -193,17 +194,14 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/"
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+#EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-#UNCOMMENT WHEN IN NEED OF EMAILS
-
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_HOST = 'smtp.gmail.com'
-#EMAIL_PORT = 587
-#EMAIL_USE_TLS = True
-#EMAIL_HOST_USER = ''
-#EMAIL_HOST_PASSWORD = 'your-email-password'
-#DEFAULT_FROM_EMAIL = 'Your Site <noreply@yourdomain.com>'
+EMAIL_HOST = get_env_variable('MAILTRAP_HOST')
+EMAIL_PORT = get_env_variable('MAILTRAP_PORT')
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = get_env_variable('MAILTRAP_USER')
+EMAIL_HOST_PASSWORD = get_env_variable('MAILTRAP_PASSWORD')
 
 ACCOUNT_FORMS = {
     'login': 'accounts.forms.CustomLoginForm',

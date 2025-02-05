@@ -1,6 +1,5 @@
 from django.urls import path,include
 from . import views
-from allauth.account.views import LogoutView
 
 urlpatterns = [
     path('login/', views.AjaxLoginView.as_view(), name='account_login'),  # Custom login view

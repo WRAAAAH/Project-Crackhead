@@ -1,0 +1,548 @@
+/* Reset default styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  
+}
+
+/* Set a background image for the entire website */
+body {
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-image: url('../images/background.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* Your other body rules remain */
+}
+
+/* Navbar styling */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1A1A1D;
+  color: #fff;
+  padding: 10px 20px;
+  margin: 10px;
+  position: relative;
+  z-index: 1000;
+  height: 5vh;
+  border-radius: 10px;
+}
+
+.navbar .logo {
+  font-size: 1.5rem;
+}
+
+.hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 24px;
+  width: 30px;
+}
+
+.hamburger .bar {
+  height: 3px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Optional: Animation for active state of the hamburger */
+.hamburger.active .bar:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active .bar:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Slide-out menu from the right */
+.slide-menu {
+  position: fixed;
+  top: 0;
+  right: -250px; /* Hidden by default */
+  width: 250px;
+  height: 100%;
+  background-color: #000000e5;
+  padding: 60px 20px;
+  transition: right 0.3s ease;
+  z-index: 999;
+}
+
+.slide-menu ul {
+  list-style: none;
+}
+
+.slide-menu ul li {
+  margin: 20px 0;
+}
+
+.slide-menu ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+/* Open state for the slide menu */
+.slide-menu.open {
+  right: 0;
+}
+
+/* Layout wrapper for sidebar and main content */
+.content-wrapper {
+  display: flex;
+  flex: 1;
+}
+
+/* Sidebar styling */
+.sidebar {
+  width: 250px;
+  background-color:#000000af;
+  padding: 20px;
+  border-right: none;
+  border-radius: -25px;
+  border: none!important;
+  height: fit-content;
+  border-radius: 15px;
+  margin-left: 10px;
+  
+}
+
+.sidebar .user-info h2 {
+  margin-bottom: 10px;
+}
+
+.sidebar .user-info p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Main content styling */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  margin-left: 2.6vw;
+}
+
+/* ---------- New / Updated Main Content Containers ---------- */
+
+/* Ensure containers are positioned for pseudo-element shine */
+.description-container,
+.container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Full-width description container */
+.description-container {
+  width: 70%;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background: rgba(45, 49, 49, 0.205);
+
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  /* GPU-acceleration hints */
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  transition: box-shadow 0.3s ease;
+  height: 23vh;
+  border: none;
+}
+
+/* On hover, add a blurred shadow without changing the container size */
+.description-container:hover {
+  box-shadow: 0 0 25px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Flex container for the info boxes (2 per row) */
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-around;
+  align-items: stretch;  /* This makes each container fill the available height */
+  width: 69vw;
+}
+
+/* Info container boxes */
+.container {
+  flex: 1 1 calc(50% - 40px);  /* keeps the same width calculation */
+  min-width: 200px;
+  text-align: center;
+  border-radius: 8px;
+  background: rgba(45, 49, 49, 0.205);
+  backdrop-filter: blur(10px);
+  border: none;
+  color: #fff;
+  transition: box-shadow 0.3s ease;
+  height: 29vh;  /* Increase this value to your desired height */
+  
+}
+
+/* On hover, add a blurred shadow without changing the container size */
+.container:hover {
+  box-shadow: 0 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Content padding inside containers */
+.container-content,
+.description-container .container-content {
+  padding: 20px;
+}
+
+/* iOS Terminal–Style Control Bar */
+.control-bar {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: #000;
+}
+
+.circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.circle.red {
+  background-color: #ff605c;
+}
+
+.circle.yellow {
+  background-color: #ffbd44;
+}
+
+.circle.green {
+  background-color: #00ca4e;
+}
+
+
+
+/* Define the shine keyframes */
+@keyframes shine {
+  0% {
+    left: -75%;
+    opacity: 0;
+  }
+  25% {
+    left: 100%;
+    opacity: 0.5;
+  }
+  35% {
+    left: 100%;
+    opacity: 1;
+  }
+  45% {
+    left: 100%;
+    opacity: 0;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+/* -------------------- Existing Styles Below -------------------- */
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .container {
+    flex: 1 1 100%;
+  }
+}
+
+#burgr1, #burgr2, #burgr3, #burgr4 {
+  color: white;
+}
+
+#burgr1:hover, #burgr2:hover, #burgr3:hover, #burgr4:hover {
+  transition: ease-in 70ms;
+  color: #a600ff;
+}
+
+#entr1:hover, #entr2:hover, #entr3:hover, #entr4:hover {
+  transition: ease-in 70ms;
+  color: #a600ff;
+  transform: scale(105%);
+}
+
+
+/* Let your main content expand as needed */
+.content-wrapper {
+  flex: 1;
+}
+
+/* Minimal footer – no extra block, just centered text */
+.footer-minimal {
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  padding: 12px 0;
+  background: transparent; /* no background block */
+  /* No fixed or absolute positioning – it sits naturally at the bottom */
+}
+
+.footer-minimal-text a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 5px;  /* spacing between links and separator */
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover effect similar to your previous footer */
+.footer-minimal-text a:hover {
+  color: #00c3ff;
+  transform: translateX(5px);
+}
+
+
+
+
+
+#inf2-side,
+#inf3-side, #rentLab-side, #refcode-side {
+  height: 3vh;             /* Adjust height as needed */
+  background-color: #1a1a1d54;
+  margin-left: -20px;      /* Negate parent's left padding */
+  margin-right: -20px;     /* Negate parent's right padding */
+  /* Optional: add vertical margin if desired, e.g.: */
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: white;
+  justify-content: center;
+  text-align: center;
+  padding-top: 0.3rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  
+}
+
+#sidebar a {
+  margin-top: 3rem;
+  
+}
+
+#link-spacer p {
+
+  margin-top: 0.8rem!important;
+  font-weight: 600;
+  color: white;
+  margin-top: 1.1rem!important;
+  
+}
+
+#link-spacer p:hover {
+  color: #a600ff;
+  transform: scale(103%);
+  transition: ease-in-out 10ms;
+}
+
+#link-spacer-up p:hover {
+
+  color: #a600ff;
+  transform: scale(103%);
+  transition: ease-in-out 10ms;
+
+}
+
+#link-spacer-up p{
+  font-weight: 600!important;
+  margin-top: 1.5rem!important;
+  color: white;
+}
+
+#dashboard-icon {
+
+  height: 4vh;             /* Adjust height as needed */
+  background-color: none;
+  margin-left: -180px;      /* Negate parent's left padding */
+  margin-right: -20px;     /* Negate parent's right padding */
+  /* Optional: add vertical margin if desired, e.g.: */
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color:  #e5e6e7;
+  justify-content: center;
+  text-align: center;
+  padding-top: 0.3rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+}
+
+/* ===== Active Sidebar Link Indicator ===== */
+.sidebar a.active p {
+  position: relative;
+}
+
+/* The dot indicator */
+.sidebar a.active p::before {
+  content: "";
+  position: absolute;
+  left: -14px;  /* moved closer to the text compared to -20px */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  background-color: #a600ff;  /* indicator color */
+  border-radius: 50%;
+}
+
+
+#user-email {
+  color: #8d79ff;
+}
+
+#login-password-form {
+
+
+  font-weight: 700;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif!important;
+  font-size: large;
+}
+
+#reset-password-button, #cancel-subscription-button {
+
+  border-radius: 15px;
+  padding: 1rem;
+  background-color: white;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: medium;
+  border: none!important;
+  transition: ease-in-out 0.12s;
+
+}
+
+#reset-password-button:hover, #cancel-subscription-button:hover {
+  background-color: black;
+  color: white;
+}
+
+#phone-info-cont {
+  font-weight: 700;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif!important;
+  font-size: large;
+}
+
+#payment-info-cont {
+  font-weight: 700;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif!important;
+  font-size: large;
+}
+
+#card-last4 {
+  color: #8d79ff;
+}
+
+
+@media (max-width: 768px) {
+  /* Overall layout adjustments */
+  .content-wrapper {
+    flex-direction: column;
+  }
+  
+  /* Sidebar adjustments: full width, reduced padding, bottom border */
+  .sidebar {
+    width: 100%;
+    padding: 10px;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0;
+    margin-bottom: 20px;
+  }
+  
+  /* Main content: full width, no left margin */
+  .main-content {
+    width: 100%;
+    margin-left: 0;
+    padding: 10px;
+  }
+  
+  /* Description container (top container) adjustments */
+  .description-container {
+    width: 95%;
+    margin: 0 auto 20px auto;
+    height: auto;
+    padding: 0; /* Remove container padding so control bar is flush */
+  }
+  /* Apply inner padding to its content */
+  .description-container .container-content {
+    padding: 20px;
+  }
+  
+  /* Flex container for info boxes: stack vertically with a smaller gap */
+  .flex-container {
+    flex-direction: column;
+    gap: 15px;
+    width: 95%;
+    margin: 0 auto;
+  }
+  
+  /* Each info container box: remove outer padding to keep control bar flush */
+  .container {
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 100%;
+    height: auto;  /* Let content decide the height */
+    padding: 0;    /* Remove container-level padding */
+    box-sizing: border-box;
+  }
+  /* Apply inner padding to info box content */
+  .container-content {
+    padding: 20px;
+  }
+  
+  /* Adjust font sizes for headings and paragraphs */
+  h2, h3 {
+    font-size: 1.4rem;
+  }
+  p, label {
+    font-size: 1rem;
+  }
+  
+  /* Navbar adjustments for mobile */
+  .navbar {
+    padding: 10px;
+    font-size: 1rem;
+    height: auto;
+  }
+  .hamburger {
+    width: 30px;
+    height: 24px;
+  }
+  
+  /* Do NOT modify .circle so that the control bar remains as originally designed */
+  
+  /* Footer minimal adjustments */
+  .footer-minimal {
+    padding: 10px 0;
+    font-size: 0.9rem;
+  }
+}

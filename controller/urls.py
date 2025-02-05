@@ -17,10 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
-from allauth.account.views import LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
+    path('dashboard/', include('dashboard.urls')),
     path('', views.index, name="index"),  # Main app
 ]

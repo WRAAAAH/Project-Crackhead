@@ -1,5 +1,6 @@
 {% load static %}
 {% load custom_tags %}
+{% csrf_token %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +20,10 @@
                 <!-- Triggers for the popup forms -->
                 <button class="btn btn-primary" id="btnOpenLogin">Zaloguj się</button>
                 <button class="btn btn-success" id="btnOpenSignup">Rejestracja</button>
+                <a href="{% url 'dashboard_main' %}"><button class="btn btn-success">Dashboard</button></a>
+                {% if request.user.is_active %}
+                    <p>elo elo</p>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -31,7 +36,7 @@
         <!-- SVG Close Icon -->
         <svg id="btnClosePopup" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" fill="none"
-                stroke-linecap="round" stroke-linejoin="round"></path>
+stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
       </div>
 
