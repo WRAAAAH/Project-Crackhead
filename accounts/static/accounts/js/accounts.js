@@ -4,15 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
     signupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const signupErrors = document.querySelector('#signupErrors');
-        signupErrors.innerHTML = '';
+        /* const signupErrors = document.querySelector('#signupErrors');
+        signupErrors.innerHTML = ''; */
 
         const csrfToken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
-        const first_name = document.querySelector('#id_first_name').value;
-        const last_name = document.querySelector('#id_last_name').value;
-        const email = document.querySelector('#id_email').value;
-        const password1 = document.querySelector('#id_password1').value;
-        const password2 = document.querySelector('#id_password2').value;
+        const first_name = document.querySelector('#signupFirstName').value;
+        const last_name = document.querySelector('#signupSurname').value;
+        const email = document.querySelector('#signupEmail').value;
+        const password1 = document.querySelector('#signupPassword').value;
+        const password2 = document.querySelector('#signupRepeatPassword').value;
         const signupFormData = new URLSearchParams();
 
         signupFormData.append('csrfmiddlewaretoken', csrfToken);
@@ -35,12 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             if (err.error) {
                 for (const field in err.errors) {
-                    signupErrors.innerHTML = err.errors[field].join('<br>') + '<br>';
+                    // signupErrors.innerHTML = err.errors[field].join('<br>') + '<br>';
                 }
             } else if (err.message) {
-                signupErrors.innerHTML = `<div class="text-danger">${err.message}</div>`;
+                // signupErrors.innerHTML = `<div class="text-danger">${err.message}</div>`;
             } else {
-                signupErrors.innerHTML = '<div class="text-danger">An unexpected error occurred. Please try again.</div>';
+                // signupErrors.innerHTML = '<div class="text-danger">An unexpected error occurred. Please try again.</div>';
             }
         }
     })
@@ -49,19 +49,19 @@ document.addEventListener('DOMContentLoaded', () => {
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const loginErrors = document.getElementById('loginErrors');
-        loginErrors.innerHTML = '';
+        /* const loginErrors = document.getElementById('loginErrors');
+        loginErrors.innerHTML = ''; */
 
         const csrfToken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
-        const loginValue = document.getElementById('id_login_email').value;
-        const passwordValue = document.getElementById('id_password').value;
-        const rememberValue = document.getElementById('id_remember').checked;
+        const loginValue = document.getElementById('loginEmail').value;
+        const passwordValue = document.getElementById('loginPassword').value;
+        // const rememberValue = document.getElementById('id_remember').checked;
         const loginFormData = new URLSearchParams();
 
         loginFormData.append('csrfmiddlewaretoken', csrfToken);
         loginFormData.append('login', loginValue);
         loginFormData.append('password', passwordValue);
-        loginFormData.append('remember', rememberValue);
+        // loginFormData.append('remember', rememberValue);
 
         try {
             const response = await fetch('/accounts/login/', {
@@ -73,31 +73,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw data;
             const modal = document.getElementById('loginModal');
             if (modal) modal.style.display = 'none';
-            const navbar = document.getElementById('navbar');
-            navbar.innerHTML = `
-                <div class="d-flex align-items-center">
-                <span class="me-2">Welcome, ${data.user.email}!</span>
-                <button id="logoutButton" class="btn btn-outline-secondary btn-sm">Logout</button>
-                </div>
-            `;
-            document.getElementById('logoutButton').addEventListener('click', logoutUser);
         } catch (err) {
               if (err.email_verification_required) {
-                  loginErrors.innerHTML = `
-                    <div class="text-warning mb-2">${err.message}</div>
-                    <button id="resendVerificationEmail" class="btn btn-link">Resend Verification Email</button>
-                  `;
+                  // loginErrors.innerHTML = `<div class="text-warning mb-2">${err.message}</div>`;
                 document.getElementById('resendVerificationEmail').addEventListener('click', () => {
                     resendVerificationEmail(loginValue);
                 });
               } else if (err.errors) {
                   for (const field in err.errors) {
-                      loginErrors.innerHTML += err.errors[field].join('<br>') + '<br>';
+                      // loginErrors.innerHTML += err.errors[field].join('<br>') + '<br>';
                   }
               } else if (err.message) {
-                  loginErrors.innerHTML = `<div class="text-danger">${err.message}</div>`;
+                  // loginErrors.innerHTML = `<div class="text-danger">${err.message}</div>`;
               } else {
-                  loginErrors.innerHTML = '<div class="text-danger">An unexpected error occurred. Please try again.</div>';
+                  // loginErrors.innerHTML = '<div class="text-danger">An unexpected error occurred. Please try again.</div>';
               }
         }
     });

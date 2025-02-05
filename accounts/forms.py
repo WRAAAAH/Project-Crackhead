@@ -1,6 +1,7 @@
 import uuid
-from allauth.account.forms import LoginForm, SignupForm
+from allauth.account.forms import LoginForm, SignupForm, ResetPasswordForm
 from django import forms
+from django.contrib.auth.forms import PasswordResetForm
 from django.utils.text import slugify
 from django.contrib.auth import authenticate
 
@@ -51,7 +52,6 @@ class CustomLoginForm(LoginForm):
             raise forms.ValidationError("Invalid login credentials. Please try again.")
         elif not self.user_cache.is_active:
             raise forms.ValidationError("This account is inactive.")
-
         return cleaned_data
 
     def get_user(self):
@@ -126,3 +126,23 @@ class CustomSignupForm(SignupForm):
 
         user.save()
         return user
+
+class CustomResetPasswordForm(ResetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def save(self, request):
+        # Access the parent class logic
+        email_address = super(CustomResetPasswordForm, self).save(request)
+
+        # Log the reset request (optional)
+        print(f"Password reset requested for: {email_address}")
+
+        # Example: Perform additional processing
+        if hasattr(self, "users"):
+            for user in self.users:
+                # Example of adding a custom log entry
+                print(f"Sending reset email to user: {user.email} (ID: {user.pk})")
+
+        # Ensure to return the email address as required by the base class
+        return email_address

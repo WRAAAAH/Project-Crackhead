@@ -1,0 +1,68 @@
+{% extends 'dashboard/base_dash.html' %}
+
+{% block content %}
+    <main class="main-content">
+      <!-- Full-Width Description Container -->
+      <div class="description-container">
+        <div class="control-bar">
+          <div class="circle red"></div>
+          <div class="circle yellow"></div>
+          <div class="circle green"></div>
+        </div>
+        <div class="container-content">
+          <h2>Main Description</h2>
+          <p>
+            This is the main description container that spans the entire row. It can provide an overview or detailed description.
+          </p>
+        </div>
+      </div>
+
+      <!-- Flex Container for the Smaller Info Boxes (2 per row) -->
+      <div class="flex-container">
+        <div class="container">
+          <div class="control-bar">
+            <div class="circle red"></div>
+            <div class="circle yellow"></div>
+            <div class="circle green"></div>
+          </div>
+          <div class="container-content">
+            <h3>Container 1</h3>
+            <p>Additional info for container 1.</p>
+          </div>
+        </div>
+        <div class="container">
+          <div class="control-bar">
+            <div class="circle red"></div>
+            <div class="circle yellow"></div>
+            <div class="circle green"></div>
+          </div>
+          <div class="container-content">
+            <h3>Container 2</h3>
+            <p>Additional info for container 2.</p>
+          </div>
+        </div>
+        <div class="container">
+          <div class="control-bar">
+            <div class="circle red"></div>
+            <div class="circle yellow"></div>
+            <div class="circle green"></div>
+          </div>
+          <div class="container-content">
+            <h3>Container 3</h3>
+            <p>Additional info for container 3.</p>
+          </div>
+        </div>
+        <div class="container">
+          <div class="control-bar">
+            <div class="circle red"></div>
+            <div class="circle yellow"></div>
+            <div class="circle green"></div>
+          </div>
+          <div class="container-content">
+            <h3>Container 4</h3>
+            <p>Additional info for container 4.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,604 @@
+/* Force GPU acceleration on transitions to reduce artifacts */
+* {
+    transform: translateZ(0);
+    box-sizing: border-box;
+  }
+  
+  /* Basic reset/demo styling */
+  body, html {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    overflow-x: hidden;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  /* NAVIGATION BAR */
+  .navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    z-index: 2000; /* Above the overlay */
+  }
+  
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .navbar-brand {
+    font-size: 1.5rem;
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .navbar-buttons .btn {
+    margin-left: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 0.3rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0069d9;
+  }
+  
+  .btn-success {
+    background-color: #28a745;
+    color: #fff;
+  }
+  
+  .btn-success:hover {
+    background-color: #218838;
+  }
+  
+  .btn-warning {
+    background-color: #ffc107;
+    color: #212529;
+  }
+  
+  .btn-warning:hover {
+    background-color: #e0a800;
+  }
+  
+  /* MAIN CONTENT */
+  main {
+    padding: 5rem 2rem 2rem; /* Added top padding to account for fixed navbar */
+  }
+  
+  .main-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* POPUP OVERLAY */
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(8px); /* Blurs the background */
+    background-color: rgba(0, 0, 0, 0.3); /* Darken overlay */
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Below navbar but above page content */
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .popup-overlay.active {
+    display: flex;
+    opacity: 1;
+  }
+
+
+  /* POPUP BOX */
+  .popup {
+    position: relative;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    width: 55vw; /* Set to 60% of viewport width */
+    max-width: 800px; /* Maximum width for larger screens */
+    height: 74.5vh; /* Increased to 80% of viewport height */
+    max-height: 90vh; /* Ensures it doesn't exceed the viewport height */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    /* Smooth show/hide animation */
+    transform: scale(0.8);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    
+  }
+  
+  .popup.show {
+    transform: scale(1);
+    opacity: 1;
+  }
+  
+ 
+/* POPUP HEADER */
+.popup-header {
+    display: flex;
+    justify-content: center; /* Centers the title horizontally */
+    align-items: center; /* Vertically aligns the elements */
+    position: relative; /* Allows absolute positioning for the close button */
+    margin-bottom: 1.5rem; /* Keeps spacing below the header */
+  }
+  
+  .popup-header h2 {
+    margin: 0;
+    font-size: 1.75rem; /* Increased font size for better readability */
+    color: #333;
+    flex: 1; /* Ensures the title takes up available space */
+    text-align: center; /* Centers the text within the flex container */
+  }
+  
+  .popup-header svg {
+    position: absolute; /* Positions the close button independently */
+    right: 0; /* Aligns it to the right edge */
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    fill: #666;
+    transition: fill 0.2s ease-in-out;
+  }
+  
+  .popup-header svg:hover {
+    fill: #000;
+  }
+  
+  
+
+
+/* FORM CONTAINER */
+.form-container {
+    position: relative;
+    min-height: 98%; /* Ensures sufficient space for all forms */
+    overflow-y: hidden; /* Allows vertical scrolling */
+    overflow-x: hidden; /* Prevents horizontal scrolling */
+    padding-right: 0.5rem; /* Prevents scrollbar from overlapping content */
+    padding-left: 0.5rem; /* Balance padding */
+  }
+  
+  /* FORM WRAPPERS */
+  .form-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Ensures the form doesn't exceed container width */
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Smoother transitions */
+    opacity: 0;
+    transform: translateX(50px);
+    pointer-events: none; /* Not clickable when inactive */
+  }
+  
+  .form-wrapper.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  
+  /* FORM GROUPS */
+  .form-group {
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5em;
+    color: #333;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 0.75em;
+    border: 1px solid #ccc;
+    border-radius: 0.3rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-group input:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  /* SOCIAL BUTTONS */
+  .social-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    margin-bottom: 1.5em;
+    align-items: center;
+  }
+  
+  .btn-social-google,
+  .btn-social-github,
+  .btn-social-discord {
+    display: flex; /* Enables Flexbox for the button */
+    align-items: center; /* Vertically aligns items in the center */
+    justify-content: start; /* Aligns content to the left */
+    width: 100%;
+    padding: 0.75em;
+    font-size: 1rem;
+    font-weight: bold; /* Optional: makes text more prominent */
+    border: none;
+    margin-bottom: 0.6em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    background-color: #f5f5f5; /* Background color for the button */
+    gap: 0.5em; /* Adds spacing between the icon and text */
+    justify-content: center;
+    font-weight: 600;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+    border-radius: 12px;
+    width: 75%;
+
+    background: linear-gradient(90deg, rgba(238,238,238,1) 50%, rgba(0,0,0,1) 50%)!important; 
+    background-size: 200% 100%!important;
+    background-position: 0 0!important;
+    transition: background-position 0.45s ease-in-out!important;
+    outline: none!important;
+    color: black!important;
+    
+  }
+
+  .btn-social-discord:hover,
+  .btn-social-github:hover,
+  .btn-social-google:hover {
+
+    background-position: -99.9% 0!important; /* Shift the gradient to the right */
+    color: white!important; /* Change text color for contrast on hover */
+    outline: none!important;
+    border-radius: 12px !important;
+
+  }
+
+
+
+
+/* Text inside buttons */
+.btn-social-google span,
+.btn-social-github span,
+.btn-social-discord span {
+  display: inline-block;
+  flex: 1; /* Allows the text to occupy remaining space */
+  text-align: left; /* Aligns text to the left */
+}
+
+  /* Icons inside buttons */
+.btn-social-google svg,
+.btn-social-github svg,
+.btn-social-discord svg {
+  width: 27px; /* Adjust icon size */
+  height: 27px;
+  flex-shrink: 0; /* Prevents the icon from shrinking */
+}
+  
+ 
+  
+  /* FORM ACTIONS */
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1em;
+  }
+  
+  .form-actions button {
+    padding: 0.75em 1.5em;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* SWITCH LINKS */
+  .form-switch-link {
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
+    transition: color 0.2s ease-in-out;
+  }
+  
+  .form-switch-link:hover {
+    color: #0056b3;
+  }
+  
+  /* SWITCH TEXT */
+  .switch-text {
+    margin-top: 1em;
+    color: #333;
+  }
+  
+  .switch-text .form-switch-link {
+    color: #007bff;
+  }
+  
+  .switch-text .form-switch-link:hover {
+    color: #0056b3;
+  }
+  
+  /* RESPONSIVE DESIGN */
+  @media (max-width: 768px) {
+    .popup {
+      width: 80vw; /* Adjust popup width for tablets */
+      height: 80vh; /* Increase height for better visibility */
+      max-width: 700px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .popup {
+      padding: 1.5rem;
+      width: 90vw;
+      height: 90vh; /* Use almost full viewport height on small devices */
+      max-width: 600px;
+    }
+  
+    .popup-header h2 {
+      font-size: 1.5rem;
+    }
+  
+    .form-container {
+      min-height: 550px;
+    }
+  
+    .form-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .form-actions button {
+      width: 100%;
+      margin-top: 0.5em;
+    }
+  
+    .social-btns {
+      gap: 0.3em;
+    }
+  }
+
+  
+
+#separator-textLog {
+    text-align: center;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: medium;
+    font-weight: 400;
+}
+
+#separator-line {
+
+    margin-top: -25px;
+    margin-bottom: 2vh;
+}
+
+#separator-textReg {
+
+    text-align: center;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: medium;
+    font-weight: 400;
+    
+    
+  
+}
+
+#separator-lineReg {
+  
+  margin-top: -25px;
+  margin-bottom: 3vh;
+
+}
+
+
+#toResetForm {
+
+    text-decoration: none;
+    color: rebeccapurple;
+    font-weight: 500;
+}
+
+#toSignupForm {
+
+    text-decoration: none;
+    color: rebeccapurple;
+    font-weight: 500;
+}
+
+
+
+#btnClosePopup {
+  width: 28px;
+  height: 28px;
+  color: #000;
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+#btnClosePopup:hover {
+    transform: scale(1.4) rotate(90deg);
+
+}
+
+#popupTitle {
+
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 600;
+
+}
+
+#signupPassword, #signupRepeatPassword, #signupEmail, #loginEmail, #loginPassword {
+
+    width: 77%;
+    
+}
+
+
+
+#zalogujBtncont{
+
+  
+  align-items: center!important;
+  display: flex!important;
+  flex-direction: column!important;
+  
+  
+
+}
+
+#zalogujBtn {
+
+  justify-content: center;
+  width: 65%;
+  border-radius: 15px;
+
+}
+
+#zalogujBtn:hover {
+
+  background-color: #0064c0;
+  transition: ease-in 0.15s;
+  
+  
+
+}
+
+#zarejestrujBtncont {
+
+  align-items: center!important;
+  display: flex!important;
+  flex-direction: column!important;
+  margin-top: 2rem;
+
+}
+
+#zarejestrujBtn {
+
+  justify-content: center;
+  width: 65%;
+  border-radius: 15px;
+
+}
+
+#zarejestrujBtn:hover {
+
+  background-color: #0064c0;
+  transition: ease-in 0.15s;
+}
+
+
+#spansLoginclck {
+  
+  justify-content: center;
+  gap: 8em;
+  
+}
+
+
+#namewrapp {
+
+  display: flex!important;
+  flex-direction: row;
+  gap: 2rem; /* Spacing between form groups */
+  align-items: center!important;
+  justify-content: left!important;
+  margin-left: 5.3rem;
+}
+
+
+#signupSurname {
+
+  width: 19.5rem;
+
+}
+
+
+#spanRegclck {
+
+  text-align: center;
+  margin-top: 2rem;
+
+}
+
+#backToLoginFromSignup {
+
+  text-decoration: none;
+  color: rebeccapurple;
+  font-weight: 500;
+}
+
+
+#resetEmail {
+
+  width: 70%;
+  
+  
+}
+
+
+#resetForm {
+
+  margin-top: 4vh;
+
+}
+
+#resetEmailBtnCont {
+
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+
+#spanResetclck {
+
+  text-align: center;
+
+}
+
+#resetEmailBtn {
+
+  justify-content: center;
+  width: 65%;
+  border-radius: 15px;
+  background-color: #fdd006;
+}
+
+#resetEmailBtn:hover {
+
+  background-color: #c7a200;
+  transition: ease-in 0.15s;
+
+}
+
+#backToLoginFromReset {
+
+  text-decoration: none;
+  color: rebeccapurple;
+  font-weight: 500;
+}

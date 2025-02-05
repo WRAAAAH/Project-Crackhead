@@ -1,0 +1,78 @@
+{% extends 'dashboard/base_dash.html' %}
+
+{% block content %}
+    <main class="main-content">
+      <!-- Full-Width Description Container -->
+      <div class="description-container">
+        <div class="control-bar">
+          <div class="circle red"></div>
+          <div class="circle yellow"></div>
+          <div class="circle green"></div>
+        </div>
+        <div class="container-content">
+          <h2>Tutaj znajdują się informacje o twoim koncie</h2><br>
+          <p>
+            W razie potrzeby zresetuj hasło, edytuj numer telefonu (w przypadku włączonego MFA) lub zobacz wprowadzone dane do płatności.
+          </p>
+        </div>
+      </div>
+
+      <!-- Flex Container for the Smaller Info Boxes (2 per row) -->
+      <div class="flex-container" id="flex1-konto">
+        <div class="container">
+          <div class="control-bar">
+            <div class="circle red"></div>
+            <div class="circle yellow"></div>
+            <div class="circle green"></div>
+          </div>
+          <div class="container-content">
+            <h3>Twóje dane logowania</h3><br>
+            <form id="login-password-form">
+              <div class="field-group">
+                <label for="user-email">Email:</label>
+                <span id="user-email">user@example.com</span>
+              </div><br>
+              <div class="field-group">
+                <label for="user-password">Hasło:</label>
+                <!-- Liczba kropek odpowiadająca długości hasła -->
+                <span id="user-password">••••••••</span>
+              </div><br>
+              <button type="button" id="reset-password-button" onclick="sendResetPasswordEmail()">
+                Resetuj hasło
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="container" id="flex2-konto">
+          <div class="control-bar">
+            <div class="circle red"></div>
+            <div class="circle yellow"></div>
+            <div class="circle green"></div>
+          </div>
+          <div class="container-content" id="phone-info-cont">
+            <h3>Podpięty numer telefonu</h3><br>
+            <p id="phone-info"></p>
+          </div>
+        </div>
+        <div class="container" id="flex3-konto">
+          <div class="control-bar">
+            <div class="circle red"></div>
+            <div class="circle yellow"></div>
+            <div class="circle green"></div>
+          </div>
+          <div class="container-content" id="payment-info-cont">
+            <h3>Informacje do płatności</h3><br>
+            <p>
+              Karta: **** **** **** <span id="card-last4">1234</span>
+            </p>
+            <p><br>
+              Data następnego rozliczenia: <span id="next-billing-date">2025-03-15</span>
+            </p><br>
+            <button type="button" id="cancel-subscription-button">
+              Anuluj subskrypcję
+            </button>
+          </div>
+        </div>
+
+    </main>
+{% endblock %}
