@@ -18,11 +18,11 @@
             <a class="navbar-brand" href="#">MyWebsite</a>
             <div class="navbar-buttons">
                 <!-- Triggers for the popup forms -->
-                <button class="btn btn-primary" id="btnOpenLogin">Zaloguj się</button>
-                <button class="btn btn-success" id="btnOpenSignup">Rejestracja</button>
-                <a href="{% url 'dashboard_main' %}"><button class="btn btn-success">Dashboard</button></a>
-                {% if request.user.is_active %}
-                    <p>elo elo</p>
+                {% if request.user.is_authenticated %}
+                    <button class="btn btn-warning" id="btnLogout" onclick="logoutUser()">Wyloguj</button>
+                {% else %}
+                    <button class="btn btn-primary" id="btnOpenLogin">Zaloguj się</button>
+                    <button class="btn btn-success" id="btnOpenSignup">Rejestracja</button>
                 {% endif %}
             </div>
         </div>

@@ -30,12 +30,11 @@
             <form id="login-password-form">
               <div class="field-group">
                 <label for="user-email">Email:</label>
-                <span id="user-email">user@example.com</span>
+                <span id="user-email">{{ email }}</span>
               </div><br>
               <div class="field-group">
                 <label for="user-password">Hasło:</label>
-                <!-- Liczba kropek odpowiadająca długości hasła -->
-                <span id="user-password">••••••••</span>
+                <span id="user-password">{{ masked_password }}</span>
               </div><br>
               <button type="button" id="reset-password-button" onclick="sendResetPasswordEmail()">
                 Resetuj hasło
@@ -50,8 +49,14 @@
             <div class="circle green"></div>
           </div>
           <div class="container-content" id="phone-info-cont">
-            <h3>Podpięty numer telefonu</h3><br>
-            <p id="phone-info"></p>
+              <div class="field-group">
+                  <label for="user-name">Imię:</label>
+                  <span id="user-name">{{ first_name }}</span>
+                  <label for="user-surname">nazwisko:</label>
+                  <span id="user-surname">{{ last_name }}</span>
+              </div><br>
+              <h3>Podpięty numer telefonu</h3><br>
+              <p id="phone-info"></p>
           </div>
         </div>
         <div class="container" id="flex3-konto">

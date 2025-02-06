@@ -30,11 +30,9 @@ body {
   background-color: #1A1A1D;
   color: #fff;
   padding: 10px 20px;
-  margin: 10px;
   position: relative;
   z-index: 1000;
   height: 5vh;
-  border-radius: 10px;
 }
 
 .navbar .logo {
@@ -117,12 +115,9 @@ body {
   background-color:#000000af;
   padding: 20px;
   border-right: none;
-  border-radius: -25px;
+  border-bottom-right-radius: 15px;
   border: none!important;
   height: fit-content;
-  border-radius: 15px;
-  margin-left: 10px;
-  
 }
 
 .sidebar .user-info h2 {
@@ -417,6 +412,14 @@ body {
 
 
 #user-email {
+  color: #8d79ff;
+}
+
+#user-name {
+  color: #8d79ff;
+}
+
+#user-surname {
   color: #8d79ff;
 }
 

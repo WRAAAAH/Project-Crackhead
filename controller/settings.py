@@ -33,7 +33,7 @@ SECRET_KEY = get_env_variable('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'django-testing.local', '0.0.0.0']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'django-testing.local', '0.0.0.0', '192.168.172.133']
 
 
 # Application definition
@@ -86,6 +86,9 @@ MIDDLEWARE = [
 
     #AllAuth
     'allauth.account.middleware.AccountMiddleware',
+
+    #only authenticated users
+    'controller.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'controller.urls'
@@ -169,8 +172,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -179,14 +180,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #Allauth settings
 SITE_ID = 1
 
-LOGIN_REDIRECT_URL = '/'
+#Restricted access settings
+RESTRICTED_PATHS = ['/dashboard/']
+LOGIN_URL = '/'
+
+LOGIN_REDIRECT_URL = '/dashboard/main'
 LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_SIGNUP_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
@@ -208,6 +213,8 @@ ACCOUNT_FORMS = {
     'signup': 'accounts.forms.CustomSignupForm',
     'reset_password': 'accounts.forms.CustomResetPasswordForm',
 }
+ACCOUNT_ADAPTER = 'accounts.adapter.CustomAccountAdapter'
+
 
 #UNCOMMENT WHEN IN NEED OF SECURITY
 
@@ -218,7 +225,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 #cookies
 
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 5 # 7 days long sessions
 #SESSION_COOKIE_SECURE = True  # Use HTTPS in production
 SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript from accessing the cookie
 SESSION_COOKIE_SAMESITE = 'Lax'  # Prevent CSRF with third-party sites

@@ -11,7 +11,14 @@ def dashboard_labconfig(request):
     return render(request, 'dashboard/dashboard_labconfig.html')
 
 def dashboard_account(request):
-    return render(request, 'dashboard/dashboard_account.html')
+    user = request.user
+    context = {
+        'email': user.email,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'masked_password': '••••••••'
+    }
+    return render(request, 'dashboard/dashboard_account.html', context)
 
 def dashboard_pytania_02(request):
     return render(request, 'dashboard/INF02/dashboard_pytania_02.html')
