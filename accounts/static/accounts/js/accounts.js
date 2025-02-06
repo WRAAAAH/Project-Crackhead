@@ -53,8 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const data = await response.json();
-            if (!response.ok) throw data;
-
+            if (response.ok && data.success) {
+                // Redirect to the URL provided in the JSON response
+                window.location.href = data.redirect_url;
+            } else {
+                // Handle errors (e.g., display error messages to the user)
+                console.error('Login Error:', data.errors);
+            }
         } catch (err) {
             console.error('Login Error:', err);
         }
