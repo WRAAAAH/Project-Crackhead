@@ -38,9 +38,6 @@ function sendResetPasswordEmail() {
 
 // Przykładowe dane użytkownika – w realnej implementacji pobierzesz je z backendu
 var userData = {
-  email: "user@example.com",
-  // Długość hasła – aby wyświetlić odpowiednią liczbę kropek
-  passwordLength: 8,
   // Jeśli numer nie jest podpięty, wartość może być pusta lub null
   phone: "", // np. "123-456-789" gdy podpięty
   cardLast4: "1234",
@@ -48,12 +45,6 @@ var userData = {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Ustaw email
-  document.getElementById('user-email').innerText = userData.email;
-  
-  // Ustaw zakropkowane hasło – ilość kropek odpowiada długości hasła
-  var maskedPassword = '•'.repeat(userData.passwordLength);
-  document.getElementById('user-password').innerText = maskedPassword;
   
   // Ustaw numer telefonu lub komunikat, gdy numer nie jest podpięty
   var phoneInfoElem = document.getElementById('phone-info');

@@ -1,5 +1,6 @@
+from allauth.account.forms import ResetPasswordForm
 from django import template
-from accounts.forms import CustomLoginForm, CustomSignupForm, CustomResetPasswordForm
+from accounts.forms import CustomLoginForm, CustomSignupForm
 
 register = template.Library()
 
@@ -16,4 +17,4 @@ def render_signup_form(context):
 
 @register.inclusion_tag('accounts/reset_password_form.html', takes_context=True)
 def render_reset_password_form(context):
-    return {'form': CustomResetPasswordForm()}
+    return {'form': ResetPasswordForm()}
